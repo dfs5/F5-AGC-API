@@ -1,7 +1,7 @@
 {
     "name" : "<insert-deployment-name>",
     "type" : "GCAPI_AAD_APPS",
-    "action" : "DELETE",
+    "action" : "ADD",
     "inputs": {
         "aadAppProperties" : {
             "aadApiCredentials" : {
