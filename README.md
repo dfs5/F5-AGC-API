@@ -16,3 +16,5 @@ Rest API can be accessed via: https://{{bigip}}/mgmt/shared/iapp/gcapi/v1.0/guid
 
 For authorization use Basic Auth. 
 
+Before deployment modify in the json file all sections marked with <some-text> to satisfy your environmental requirements.
+
