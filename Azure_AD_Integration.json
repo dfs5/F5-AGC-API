@@ -1,0 +1,133 @@
+{
+    "name" : "<insert-deployment-name>",
+    "type" : "GCAPI_AAD_APPS",
+    "action" : "DELETE",
+    "inputs": {
+        "aadAppProperties" : {
+            "aadApiCredentials" : {
+                "tenantId": "<insert-tenantID-from-AzureAD",
+                "clientId": "insert-clientID-from-AzureAD",
+                "clientSecret" : "secret"
+            },
+            "useExistingApplication": false,
+            "displayName": "<insert-deployment-name>",
+            "useTemplate": true,
+            "templateName": "F5 BIG-IP APM Azure AD integration",
+            "templateId": "12f0b63d-efe6-4c9c-92ed-8b3f043b87a7",
+            "replyUrl": "https://<insert-SP-host>/saml/sp/profile/post/acs",
+            "signonUrl": "https://<insert-SP-host>",
+            "logoutUrl": "https://<insert-SP-host>/saml/sp/profile/redirect/slo",
+            "useCertFromAzureMetadata": false,
+            "samlSigningKey": "/Common/default.key",
+            "samlSigningCert": "/Common/default.crt",
+            "pfxKeyPassphrase": "<secret>",
+            "samlSigningOption": "Sign SAML assertion",
+            "samlSigningAlgorithm": "RSA-SHA256",
+            "accessSettings": {
+                "users": [
+                    {
+                        "id": "<insert-existing-userID>",
+                        "displayName": "<insert-existing-user-name>"
+                    }
+                ],
+                "userGroups": []
+            },
+            "claims": {
+                "required": [
+                    {
+                        "display": "Unique User Identifier (Name ID)",
+                        "name": "nameidentifier",
+                        "nameSpace": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims",
+                        "value": "user.userprincipalname"
+                    },
+                    {
+                        "display": "Identity",
+                        "name": "Identity",
+                        "nameSpace": "",
+                        "value": "user.onpremisessamaccountname"
+                    }
+                ],
+                "additional": [
+                    {
+                        "name": "emailaddress",
+                        "nameSpace": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims",
+                        "value": "user.mail"
+                    },
+                    {
+                        "name": "givenname",
+                        "nameSpace": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims",
+                        "value": "user.givenname"
+                    },
+                    {
+                        "name": "name",
+                        "nameSpace": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims",
+                        "value": "user.userprincipalname"
+                    },
+                    {
+                        "name": "surname",
+                        "nameSpace": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims",
+                        "value": "user.surname"
+                    },
+                    {
+                        "name": "empId",
+                        "nameSpace": "",
+                        "value": "user.employeeid"
+                    }
+                ]
+            },
+            "conditionalAccessPolicies": []
+        },
+        "samlSp" : {
+            "spHost": "<insert-SP-host>",
+            "entityId": "https://<insert-SP-host>/hackazon-federated",
+            "description": "demo run",
+            "isAuthnRequestSigned": false,
+            "spSignkey": "",
+            "spCertificate": "",
+            "wantAssertionSigned": true,
+            "spDecryptionKey": "/Common/default.key",
+            "spDecryptionCert": "/Common/default.crt",
+            "wantAssertionEncrypted": true,
+            "forceAuthn": false,
+            "nameIdPolicyAllowCreate": true,
+            "nameIdPolicyFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
+            "nameIdPolicySpNameQualifier": "",
+            "providerName": "",
+            "spName": "_sp"
+        },
+        "virtual" : {
+            "ip" : "10.24.1.23",
+            "port" : 443,
+            "clientSslProfile": {
+                "key": "/Common/default.key",
+                "cert": "/Common/default.crt",
+                "parent": "clientssl"
+            }
+
+        },
+        "accessProfileSettings" : {
+            "inactivityTimeout" : 1200
+        },
+        "defaultPool" : {
+            "ssl": false,
+            "loadBalancingMode": "round-robin",
+            "slowRampTime": 300.0,
+            "members": [
+                {
+                    "ip": "/Common/<insert-member-ip>",
+                    "port": 80.0,
+                    "connectionLimit": 0.0,
+                    "priorityGroup": 0.0
+                }
+            ],
+            "monitors": {
+                "names": []
+            }
+        },
+        "sso": {
+            "oauthBearer": {
+                "existingReference": "/Common/<insert-existing-sso-config>"
+            }
+        }
+    }
+}
